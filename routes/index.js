@@ -1,9 +1,35 @@
 var express = require('express');
 var router = express.Router();
 
+var http = require('http');
+
+var request = require('request');
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
+});
+
+router.get('/query', function(req, res, next) {
+	var host = "http://sclab.gachon.ac.kr:19002";
+	var path = "/query?query=";
+	var query = "for $ds in dataset Metadata.Dataset return $ds;";
+
+	request({
+		url: host + path + query,
+		json: true
+	}, function(error, response, body){
+		res.json(body);
+	});
+
+	/*
+	http.get(host + path + query, (response) => {
+		response.setEncoding('utf8');	
+		response.on('data', (body) => {
+			res.json(body);
+		})
+	});
+	*/
 });
 
 router.get('/dev1', function(req, res, next) {
