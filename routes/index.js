@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 router.get('/query', function(req, res, next) {
 	var host = "http://sclab.gachon.ac.kr:19002";
 	var path = "/query?query=";
-	var query = "for $ds in dataset Metadata.Dataset return $ds;";
+	var query = req.query.query;
 
 	request({
 		url: host + path + query,
@@ -22,14 +22,6 @@ router.get('/query', function(req, res, next) {
 		res.json(body);
 	});
 
-	/*
-	http.get(host + path + query, (response) => {
-		response.setEncoding('utf8');	
-		response.on('data', (body) => {
-			res.json(body);
-		})
-	});
-	*/
 });
 
 router.get('/dev1', function(req, res, next) {
