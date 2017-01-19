@@ -1,11 +1,266 @@
 <!DOCTYPE html>
 <html>
+
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <title>AsterixDB WebConsole</title>
+
+		<!-- jQuery -->
+		<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+			  integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+				  crossorigin="anonymous"></script>
+		<!-- jQuery -->
+
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<!-- Bootstrap -->
+
+		<!-- jsTree -->
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.3/themes/default/style.min.css" />
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.3/jstree.min.js"></script>
+		<!-- jsTree -->
+
+		<!-- code mirror -->
+		<script src="/javascripts/codemirror.js"></script>
+		<link rel="stylesheet" href="/stylesheets/codemirror.css">
+		<script src="/javascripts/javascript.js"></script>
+		<script src="/javascripts/autorefresh.js"></script>
+		<!-- code mirror -->
+
+		<style>
+			/* z-index : 1000, */
+
+			#query-editor-layer{
+				position: absolute;
+				top: 0;
+				left: 0;
+				display: none;					
+				z-index: 1000;
+				background: rgba(100,100,100, 0.6);
+			}
+
+			#query-editor-container{
+				width: 70%;
+				height: 80%;
+				margin: 50px auto;
+				background: rgba(255,255,255, 0.6);;
+			}
+
+			#query-editor{
+				float:left;
+				width: 70%;	
+				height: 100%;
+			}
+
+			#query-editor-helper{
+				float:left;
+				width: 30%;	
+				height: 100%;
+				padding: 10px;
+			}
+
+			.navbar {
+				margin-bottom: 0;
+			}
+		</style>
+
+		<script>
+			$(function(){	 
+				// set query editor width & height
+				var windowHeight = $(window).height();
+				var windowWidth = $(window).width();
+
+				$('#query-editor-layer').css('width', windowWidth).css('height', windowHeight);
+
+				$('#query').click(function(){
+					$('#query-editor-layer').show();
+				});
+
+					
+				var queryEditor = document.getElementById('query-editor');
+				//https://github.com/codemirror/CodeMirror/issues/3098#issuecomment-147022207
+				var _queryEditor = CodeMirror(queryEditor, {
+					mode: "javascript",
+					lineNumbers: true,
+					autoRefresh: true,
+					foldGutter: true,
+					gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+				});
+
+				$('#browser').click(function(){
+					$('#tree').css('margin-left', '0%');
+					$('#detail').css('width', '80%');
+				});
+
+
+				// jsTree
+				$('#tree-container').jstree();
+
+			});
+		</script>
+
   </head>
+
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+		<!-- nav bar -->
+		<!-- nav bar -->
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">
+						<img alt="brand" style="height:100%"src="https://asterixdb.apache.org/img/asterixdb_tm.png">
+					</a>
+				</div>
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li id="query" ><a href="#">Query<span class="sr-only">(current)</span></a></li>
+						<li id="browser" ><a href="#">Browser</a></li>
+					</ul>
+
+					<!-- right menu -->
+					<!-- right menu -->
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Action</a></li>
+								<li><a href="#">Another action</a></li>
+								<li><a href="#">Something else here</a></li>
+								<li role="separator" class="divider"></li>
+								<li><a href="#">Separated link</a></li>
+							</ul>
+						</li>
+					</ul>
+					<!-- right menu -->
+					<!-- right menu -->
+				</div><!-- /.navbar-collapse -->
+			</div><!-- /.container-fluid -->
+		</nav>
+		<!-- nav bar -->
+		<!-- nav bar -->
+		<div id="tree" style="float:left; width: 20%; background:rgba(240,240,240, 0.5); height: 800px; margin-left: -20%; padding: 10px;">
+			<div id="tree-container">
+				<ul>
+					<li>Dataverse 1 
+						<ul>
+							<li>DataType A</li>
+							<li>DataType B</li>
+							<li>DataType C</li>
+							<li>DataType D</li>
+						</ul>
+					</li>
+					<li>Dataverse 2
+						<ul>
+							<li>DataType A</li>
+							<li>DataType B</li>
+							<li>DataType C</li>
+							<li>DataType D</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+
+			<h3>-&gt;dataverse & dataset information (using jsTree library)</h3>
+
+		</div>
+		<div id="detail" style="float:left; width: 100%; height: 800px; padding: 10px;">
+			<h3>Detail information (table)</h3>
+			<table class="table table-bordered" style="text-align: center">
+				<thead>
+					<tr>
+						<th>key</th>
+						<th>key</th>
+						<th>key</th>
+						<th>key</th>
+						<th>key</th>
+						<th>key</th>
+						<th>key</th>
+						<th>key</th>
+						<th>key</th>
+						<th>key</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+					</tr>
+					<tr>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+					</tr>
+					<tr>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+					</tr>
+					<tr>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+					</tr>
+					<tr>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+						<td>value</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>Some statistics for numeric data..</h3>
+			<img src="http://seaborn.pydata.org/_images/distributions_26_0.png">
+				
+		</div>
+
+		<div id="query-editor-layer">
+			<div id="query-editor-container">
+				<div id="query-editor">
+				</div>
+				<div id="query-editor-helper">
+					<span style="font-size:3em;">Area for recommending keywords or similar query history..</span>
+				</div>
+			</div>
+		</div>
   </body>
+
 </html>
