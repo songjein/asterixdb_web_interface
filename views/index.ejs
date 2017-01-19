@@ -72,13 +72,26 @@
 
 				$('#query-editor-layer').css('width', windowWidth).css('height', windowHeight);
 
+				// click query button 
 				$('#query').click(function(){
 					$('#query-editor-layer').show();
 				});
 
+				// click query editor layer
+				$('#query-editor-layer').click(function(){
+					$('#query-editor-layer').hide();
+				});
+
+				// click query editor container
+				// to prevent from hide query editor layer
+				$('#query-editor-container').click(function(){
+					return false;
+				});
+
 					
+				// codeMirror
+				// codeMirror
 				var queryEditor = document.getElementById('query-editor');
-				//https://github.com/codemirror/CodeMirror/issues/3098#issuecomment-147022207
 				var _queryEditor = CodeMirror(queryEditor, {
 					mode: "javascript",
 					lineNumbers: true,
@@ -86,11 +99,32 @@
 					foldGutter: true,
 					gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
 				});
+				
 
+				// click browser button
+				// click browser button
+				var browserToggle = false;
 				$('#browser').click(function(){
-					$('#tree').css('margin-left', '0%');
-					$('#detail').css('width', '80%');
+					if (!browserToggle){
+						$('#tree').animate({
+							marginLeft :'0%'
+						});
+						$('#detail').animate({
+							width: '80%'
+						});
+						browserToggle = true;
+					}
+					else {
+						$('#tree').animate({
+							marginLeft :'-20%'
+						});
+						$('#detail').animate({
+							width: '100%'
+						});
+						browserToggle = false;
+					}
 				});
+				// click browser button
 
 
 				// jsTree
